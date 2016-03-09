@@ -43,10 +43,11 @@ Pretty cool thing about this API:
 Things you have to know:
 
 * This API use your fields (not getters or annotations), you're free to inherit from the class you want (the API will get fields from super classes)
+* Your collections/lists have `t1`, `t2`, `tn`, `tn+1` aliases (in adding order).
 * You `ReturnClass` (`ReturnDumb` in the example above) has some constraints :
     * Use Java Wrappers for `ReturnClass` because primitive types do not handle `null` in Java
     * `DECIMAL` field in SQL means `BigDecimal` in Java, don't use `double`/`Double`
     * `INT` field in SQL means `Integer` in Java, don't use Java's `Long`
-    * Do not use sql-reserved keywords for fields, or even try to escape it with \` or preceding keyword with `_` may not work (ex: `_Group` or ``Group``).
+    * Do not use sql-reserved keywords for fields, or even try to escape it with \` or preceding keyword with `_` may not work (ex: `_Group` or \``Group`\`).
 * This API may need more tests, it has only been tested with less than 10_000 tuples.
 
