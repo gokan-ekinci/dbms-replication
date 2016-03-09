@@ -1,4 +1,4 @@
-# dbms-replication  
+# dbms-replication
 An API for replicating databases and manipulating Java beans with SQL queries
 
 
@@ -46,7 +46,7 @@ Things you have to know:
 * You `ReturnClass` (`ReturnDumb` in the example above) has some constraints :
     * Use Java Wrappers for `ReturnClass` because primitive types do not handle `null` in Java
     * `DECIMAL` field in SQL means `BigDecimal` in Java, don't use `double`/`Double`
-    * `INT` field in SQL means Integer in Java, don't use Java's `Long`
-    * Do not use sql-reserved keywords for fields, and escaping with \` or preceding keyword with `_` may not work
+    * `INT` field in SQL means `Integer` in Java, don't use Java's `Long`
+    * Do not use sql-reserved keywords for fields, or even try to escape it with \` or preceding keyword with `_` may not work (ex: `_Group` or ``Group``).
 * This API may need more tests, it has only been tested with less than 10_000 tuples.
 
