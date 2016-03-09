@@ -95,7 +95,7 @@ public class InMemorySQL {
             // Step 3 : Fill table
             for(int i = 0; i < nbElements; i++) {
                 // Step 1 : Fill `listOfColumns`
-                List<SQLMetaDataColumn> columns = dt.generateSQLMetaDataTuple(classes.get(i));
+                List<SQLMetaDataColumn> columns = dt.generateSQLMetaDataTupleFromClass(classes.get(i));
 
                 // Step 2 : Create table
                 String tableName = "t"+(i+1);
@@ -112,6 +112,8 @@ public class InMemorySQL {
 
             // EXECUTE REQUEST
             Collection<T> result = new ArrayList<>();
+            // List<SQLMetaDataColumn> resultColumns = dt.generateSQLMetaDataTupleFromSqlQuery(con, sqlQuery); => Need for having less restrictive columns
+
             try(PreparedStatement pstmt = con.prepareStatement(sqlQuery)){
                 for(int i = 0, max = parameters.length; i < max; i++){
                     pstmt.setObject(i, parameters[i]);
@@ -120,12 +122,18 @@ public class InMemorySQL {
                 try(ResultSet rs = pstmt.executeQuery()){
                     while(rs.next()){
                         T entry = returnType.newInstance();
+                        /*
+                        for(SQLMetaDataColumn column : resultColumns){
+                            GenericsUtils.setField(entry, rs.getObject(column.getColumnName()), column.getColumnName(), returnType);
+                        }
+                        */
+
                         for(Field field : GenericsUtils.getAllDeclaredFields(new ArrayList<>(), returnType)) {
                             field.setAccessible(true);
-                            // Test
-                            // LOG.info("Test => field.getName(): " + field.getName() + " rs.getObject(field.getName()): " +  rs.getObject(field.getName()));
+                            // Debug (use this commentary with precaution) : LOG.info("Test => field.getName(): " + field.getName() + " rs.getObject(field.getName()): " +  rs.getObject(field.getName()));
                             field.set(entry, rs.getObject(field.getName()));
                         }
+
                         result.add(entry);
                     }
                 }

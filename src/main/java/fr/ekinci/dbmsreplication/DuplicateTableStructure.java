@@ -22,7 +22,7 @@ public class DuplicateTableStructure extends AbstractDuplicateTable {
         return generateSQLTableFromSqlJavaId(
                 destinationFieldType,
                 destinationTableName,
-                generateSQLMetaDataTuple(
+                generateSQLMetaDataTupleFromTableName(
                         sourceConnection,
                         sourceTableName
                 )

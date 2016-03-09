@@ -30,13 +30,35 @@ public class GenericsUtils {
         return fields;
     }
 
-    public static Field getDeclaredField(String name, Class<?> type){
+    /**
+     * setAccessible(true) is done
+     *
+     * @param fieldName
+     * @param type
+     * @return
+     */
+    public static Field getField(String fieldName, Class<?> type){
         for(Field f : getAllDeclaredFields(new ArrayList<>(), type)){
-            if(f.getName().equals(name)){
+            if(f.getName().equals(fieldName)){
+                f.setAccessible(true);
                 return f;
             }
         }
 
-        throw new RuntimeException("This fieldname: " + name + "has not been found");
+        throw new RuntimeException("This fieldname: " + fieldName + " has not been found");
+    }
+
+    /**
+     * setAccessible(true) is done from {@link GenericsUtils#getField(String, Class)}
+     *
+     * @param instance
+     * @param value
+     * @param fieldName
+     * @param type
+     * @throws IllegalAccessException
+     */
+    public static void setField(Object instance, Object value, String fieldName, Class<?> type) throws IllegalAccessException {
+        Field field = getField(fieldName, type);
+        field.set(instance, value);
     }
 }

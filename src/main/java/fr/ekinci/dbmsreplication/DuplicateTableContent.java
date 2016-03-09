@@ -30,7 +30,7 @@ public class DuplicateTableContent extends AbstractDuplicateTable {
             String destinationTableName
     ) throws SQLException {
 
-        List<SQLMetaDataColumn> list = generateSQLMetaDataTuple(sourceConnection, sourceTableName);
+        List<SQLMetaDataColumn> list = generateSQLMetaDataTupleFromTableName(sourceConnection, sourceTableName);
         Statement stmtSource = sourceConnection.createStatement();
         ResultSet rsSource = stmtSource.executeQuery("SELECT * FROM " + sourceTableName);
 
@@ -67,7 +67,7 @@ public class DuplicateTableContent extends AbstractDuplicateTable {
         ResultSet rsSource = stmtSource.executeQuery("SELECT * FROM " + sourceTableName);
 
         // Const variables
-        final List<SQLMetaDataColumn> list = generateSQLMetaDataTuple(sourceConnection, sourceTableName);
+        final List<SQLMetaDataColumn> list = generateSQLMetaDataTupleFromTableName(sourceConnection, sourceTableName);
         final int numberOfColumns = list.size();
         final String insertIntoTableNameValues = "INSERT INTO " + destinationTableName + " VALUES";
 
@@ -143,8 +143,7 @@ public class DuplicateTableContent extends AbstractDuplicateTable {
             Class<?> objectTupleClass = objectTuple.getClass();
 
             for(int i = 0; i < numberOfColumns; i++){
-                Field field = GenericsUtils.getDeclaredField(metaColumns.get(i).getColumnName(), objectTupleClass);
-                field.setAccessible(true);
+                Field field = GenericsUtils.getField(metaColumns.get(i).getColumnName(), objectTupleClass);
                 tuple[i] = field.get(objectTuple);
             }
             tempTuples.add(tuple);
