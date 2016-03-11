@@ -10,7 +10,7 @@ This is how you use this API, first let's create some dumb classes:
 import fr.ekinci.dbmsreplication.inmemorysql.InMemorySQL;
 //...
 
-String sqlRequest = "SELECT t1.id_d1, t1.attr2, t1.attr3, t2.id_d2, t2.attr4, t3.id_d3, t3.attr5 " +
+String sqlRequest = "SELECT t1.id_d1 AS id_d1, t1.attr2 AS attr2, t1.attr3 AS attr3, t2.id_d2 AS id_d2, t2.attr4 AS attr4, t3.id_d3 AS id_d3, t3.attr5 AS attr5 " +
     " FROM t1" +
     " LEFT JOIN t2" +
     " ON t1.id_d1 = t2.id_d1" +
@@ -36,13 +36,13 @@ Pretty cool thing about this API:
 * Never seen an other API which do that
 * You're free to put the SQL query you want (it uses HSQLDB/HyperSQL implementation, you can use INNER JOIN, LEFT/RIGHT JOIN etc)
 * You can use placeholders (`executeQuery()` has this signature : `executeQuery(yourReturnType : Class<T>, sqlQuery : String, parameters : Object...)`
-* Your classes do not require to be related (no inheritance)
+* Your classes do not require to be related (no inheritance), you're free to inherit from the class you want.
 * Pretty fast, bench it ;)
 
 
 Things you have to know:
 
-* This API use your fields (not getters or annotations), you're free to inherit from the class you want (the API will get fields from super classes)
+* This API use your fields (not getters or annotations) + the API will get fields from super classes.
 * Your collections/lists have `t1`, `t2`, `tn`, `tn+1` aliases (in adding order).
 * Your `ReturnClass` (`ReturnDumb` in the example above) has some constraints :
     * Use Java Wrappers for `ReturnClass` because primitive types do not handle `null` in Java
