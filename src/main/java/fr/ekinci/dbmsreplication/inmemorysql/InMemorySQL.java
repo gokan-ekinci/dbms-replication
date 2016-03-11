@@ -82,13 +82,15 @@ public class InMemorySQL {
         Instant start = Instant.now();
         // String dbName = "d" + Thread.currentThread().getId(); => pffff don't use this
 
+
         try(Connection con = DriverManager.getConnection("jdbc:hsqldb:mem:" + randDbName, "SA", "")){
             con.setAutoCommit(false);
 
             // Util objects
             DuplicateTableStructure dt = new DuplicateTableStructure();
-            FieldType destinationFieldType = new HSQLDBFieldType();
+            List<String> fieldNames = dt.extractFieldNamesFromSqlQuery(sqlQuery);
             DuplicateTableContent dc = new DuplicateTableContent();
+            FieldType destinationFieldType = new HSQLDBFieldType();
 
             // Step 1 : Fill `listOfColumns`
             // Step 2 : Create table
@@ -122,17 +124,19 @@ public class InMemorySQL {
                 try(ResultSet rs = pstmt.executeQuery()){
                     while(rs.next()){
                         T entry = returnType.newInstance();
-                        /*
-                        for(SQLMetaDataColumn column : resultColumns){
-                            GenericsUtils.setField(entry, rs.getObject(column.getColumnName()), column.getColumnName(), returnType);
-                        }
-                        */
 
+                        for(String fieldName : fieldNames){
+                            GenericsUtils.setField(entry, rs.getObject(fieldName), fieldName, returnType);
+                        }
+
+
+                        /*
                         for(Field field : GenericsUtils.getAllDeclaredFields(new ArrayList<>(), returnType)) {
                             field.setAccessible(true);
                             // Debug (use this commentary with precaution) : LOG.info("Test => field.getName(): " + field.getName() + " rs.getObject(field.getName()): " +  rs.getObject(field.getName()));
                             field.set(entry, rs.getObject(field.getName()));
                         }
+                        */
 
                         result.add(entry);
                     }

@@ -1,4 +1,4 @@
-package fr.ekinci.inmemory.test;
+package fr.ekinci.dbmsreplication.test;
 
 import fr.ekinci.dbmsreplication.inmemorysql.InMemorySQL;
 import java.sql.SQLException;

@@ -1,4 +1,4 @@
-package fr.ekinci.inmemory.test;
+package fr.ekinci.dbmsreplication.test;
 
 /**
  * Created by gekinci on 08/03/16.

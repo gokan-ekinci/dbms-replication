@@ -1,4 +1,4 @@
-package fr.ekinci.inmemory.test;
+package fr.ekinci.dbmsreplication.test;
 
 import java.math.BigDecimal;
 

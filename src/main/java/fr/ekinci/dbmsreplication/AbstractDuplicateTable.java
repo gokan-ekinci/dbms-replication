@@ -10,6 +10,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * A class that factorize some replication methods
@@ -24,9 +26,30 @@ public abstract class AbstractDuplicateTable {
      * @param sqlQuery
      * @return
      */
-    public List<String> extractFieldNamesFromSqlQuery(String sqlQuery){
-        // TODO
-        return null;
+    public List<String> extractFieldNamesFromSqlQuery(String sqlQuery) throws SQLException {
+        if(sqlQuery == null){
+            throw new IllegalArgumentException("sqlQuery parameter is null");
+        }
+
+        // SELECT ... FROM
+        Pattern selectToFromPattern = Pattern.compile(" *SELECT *.+ FROM", Pattern.CASE_INSENSITIVE);
+        Matcher selectToFromMatcher = selectToFromPattern.matcher(sqlQuery.replaceAll("\n", " "));
+        String selectToFromString = null;
+        if(selectToFromMatcher.find()){
+            selectToFromString = selectToFromMatcher.group();
+        } else {
+            throw new SQLException("SQL query is not respected");
+        }
+
+        // AS field
+        List<String> sqlFieldNames = new ArrayList<>();
+        Pattern asPattern = Pattern.compile(" AS +[A-Z0-9_]+", Pattern.CASE_INSENSITIVE);
+        Matcher asMatcher = asPattern.matcher(selectToFromString);
+        while(asMatcher.find()){
+            sqlFieldNames.add(asMatcher.group().split(" ")[2]);
+        }
+
+        return sqlFieldNames;
     }
 
     /**
