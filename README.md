@@ -29,7 +29,7 @@ List<ReturnDumb> result = new InMemorySQL()
     .executeQuery(ReturnDumb.class, sqlRequest);
 ```
 
-See the complete test [here](https://github.com/eau-de-la-seine/dbms-replication/blob/master/src/test/java/fr/ekinci/inmemory/test/MainTest.java).
+See the complete test [here](https://github.com/eau-de-la-seine/dbms-replication/blob/master/src/test/java/fr/ekinci/dbmsreplication/test/InMemoryTest.java).
 
 Pretty cool thing about this API:
 
