@@ -7,9 +7,7 @@ import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.time.Duration;
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by gekinci on 08/03/16.
@@ -52,14 +50,14 @@ public class InMemoryTest {
         ldb1.add(new Dumb1(2, 93, 94));
         ldb1.add(new Dumb1(3, 95, 96));
 
-        List<Dumb2> ldb2 = new ArrayList<>();
+        Set<Dumb2> ldb2 = new HashSet<>();
         // int id_d1, int id_d2, String attr4
         ldb2.add(new Dumb2(1, 1, "Toto"));
         ldb2.add(new Dumb2(1, 2, "Tata"));
         ldb2.add(new Dumb2(1, 3, "Tutu"));
         ldb2.add(new Dumb2(2, 4, "Titi"));
 
-        List<Dumb3> ldb3 = new ArrayList<>();
+        Collection<Dumb3> ldb3 = new ArrayList<>();
         // int id_d2, int id_d3, double attr5
         ldb3.add(new Dumb3(1, 1, 97));
         ldb3.add(new Dumb3(1, 2, 98));
