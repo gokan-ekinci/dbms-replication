@@ -9,7 +9,7 @@ public class ReturnDumb {
     // From Dumb1
     private Integer id_d1;
     private BigDecimal attr2;
-    private Integer attr3;
+    private Long attr3;
 
     // From Dumb2
     private Integer id_d2;
@@ -52,11 +52,11 @@ public class ReturnDumb {
         this.attr2 = attr2;
     }
 
-    public Integer getAttr3() {
+    public Long getAttr3() {
         return attr3;
     }
 
-    public void setAttr3(Integer attr3) {
+    public void setAttr3(Long attr3) {
         this.attr3 = attr3;
     }
 

@@ -34,6 +34,14 @@ public abstract class FieldType {
             return GenericDBFieldType.TEXT;
         }
 
+        // INTEGER
+        else if(JAVA_TYPE_ID == Types.TINYINT
+                || JAVA_TYPE_ID == Types.SMALLINT
+                || JAVA_TYPE_ID == Types.INTEGER
+                ){
+            return GenericDBFieldType.INTEGER;
+        }
+
         // FLOAT/DECIMAL
         else if (JAVA_TYPE_ID == Types.FLOAT
                 || JAVA_TYPE_ID == Types.REAL
@@ -42,14 +50,6 @@ public abstract class FieldType {
                 || JAVA_TYPE_ID == Types.NUMERIC
                 ){
             return GenericDBFieldType.DECIMAL;
-        }
-
-        // INTEGER
-        else if(JAVA_TYPE_ID == Types.TINYINT
-                || JAVA_TYPE_ID == Types.SMALLINT
-                || JAVA_TYPE_ID == Types.INTEGER
-                ){
-            return GenericDBFieldType.INTEGER;
         }
 
         // BIG INTEGER
@@ -75,22 +75,22 @@ public abstract class FieldType {
     public static GenericDBFieldType genericFieldType(Class<?> clazz){
 
         // TEXT
-        if(clazz == String.class){
+        if(clazz == String.class || clazz == char.class || clazz == Character.class){
             return GenericDBFieldType.TEXT;
         }
 
-        // FLOAT/DECIMAL
-        else if (clazz == double.class || clazz == float.class || clazz == Double.class || clazz == Float.class || clazz == BigDecimal.class){
-            return GenericDBFieldType.DECIMAL;
-        }
-
         // INTEGER
-        else if(clazz == int.class || clazz == long.class || clazz == short.class || clazz == Integer.class || clazz == Long.class || clazz == Short.class){
+        else if(clazz == int.class || clazz == short.class || clazz == Integer.class || clazz == Short.class){
             return GenericDBFieldType.INTEGER;
         }
 
+        // FLOAT/DECIMAL
+        else if (clazz == double.class || clazz == float.class || clazz == Double.class || clazz == Float.class /* || clazz == BigDecimal.class */ ){
+            return GenericDBFieldType.DECIMAL;
+        }
+
         // BIG INTEGER
-        else if(clazz == BigInteger.class){
+        else if(clazz == long.class || clazz == Long.class /* || clazz == BigInteger.class*/ ){
             return GenericDBFieldType.BIGINT;
         }
 
