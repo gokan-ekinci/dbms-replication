@@ -49,7 +49,7 @@ Things you have to know:
 * Your `ReturnClass` (`ReturnDumb` in the example above) has some constraints :
     * Use Java Wrappers for `ReturnClass` because primitive types do not handle `null` in Java
     * `INT` field in SQL means `Integer` in Java, don't use Java's `Long` or `BigInteger`
-    * `BIGINTEGER` field in SQL means `Long` in Java, don't use Java's Integer` or `BigInteger`
+    * `BIGINTEGER` field in SQL means `Long` in Java, don't use Java's `Integer` or `BigInteger`
     * `DECIMAL` field in SQL means `BigDecimal` in Java, don't use `Double`
 * Your SQL query has some constraints :
     * Only aliases will be retrieved (ex: `SELECT t1.foo AS myReturnClassAttributeName, t1.wontBeRetrievedBecauseNoAlias FROM t1`).
