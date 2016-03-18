@@ -5,9 +5,11 @@ import org.junit.Assert;
 import org.junit.Test;
 import java.math.BigDecimal;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.*;
+// import java.util.*;
 
 /**
  * Created by gekinci on 08/03/16.
@@ -39,6 +41,20 @@ public class InMemoryTest {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    @Test
+    public void testJavaTypes() throws SQLException {
+        // TODO
+        String request = "SELECT id_d3 as id_d3, attr5 as attr5, attr6 AS attr6, attr7 AS attr7, attr8 AS attr8, attr9 AS attr9, attr10 AS attr10, attr11 AS attr11, attr12 AS attr12, attr13 AS attr13, attr14 AS attr14, attr18 AS attr18, attr19 AS attr19, attr20 AS attr20 FROM t1";
+        List<Dumb3> list = new ArrayList<Dumb3>(){{
+            // int id_d2, int id_d3, double attr5, Double attr6, float attr7, Float attr8, byte attr9, short attr10, int attr11, Byte attr12, Short attr13, Integer attr14, char attr15, Character attr16, String attr17, long attr18, Long attr19, Date attr20
+            add(new Dumb3((int) 2, (int) 3, (double) 5, (double) 6, (float) 7, (float) 8, (byte) 9, (short) 10, (int) 11, (byte) 12, (short) 13, (int) 14, /* (char) 'A',  (char) 'B',*/ "17", (long) 18, (long) 19, new Timestamp(System.currentTimeMillis())));
+        }};
+
+        List<ReturnDumb> result = new InMemorySQL()
+            .add(Dumb3.class, list)
+            .executeQuery(ReturnDumb.class, request);
     }
 
 

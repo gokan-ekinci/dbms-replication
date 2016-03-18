@@ -45,12 +45,15 @@ Things you have to know:
 * This API use your fields (not getters or annotations) + the API will get fields from super classes.
 * Your collections/lists have `t1`, `t2`, `tn`, `tn+1` aliases (in adding order).
 * Your `DumbN` has some constraints :
-    * Use only primitive (or wrappers) and String for attribute types.
+    * Use only primitive/wrappers (except char/Character) and String for attribute types.
+    * Use java.sql.Timestamp for date fields.
 * Your `ReturnClass` (`ReturnDumb` in the example above) has some constraints :
     * Use Java Wrappers for `ReturnClass` because primitive types do not handle `null` in Java
+    * `VARCHAR` and `TEXT` fields in SQL mean `String` in Java.
     * `INT` field in SQL means `Integer` in Java, don't use Java's `Long` or `BigInteger`
     * `BIGINTEGER` field in SQL means `Long` in Java, don't use Java's `Integer` or `BigInteger`
-    * `DECIMAL` field in SQL means `BigDecimal` in Java, don't use `Double`
+    * `DECIMAL` field in SQL means `java.util.BigDecimal` in Java, don't use `Double`
+    * `TIMESTAMP` field in SQL means `java.sql.Timestamp` in Java, don't use `java.util.Date`
 * Your SQL query has some constraints :
     * Only aliases will be retrieved (ex: `SELECT t1.foo AS myReturnClassAttributeName, t1.wontBeRetrievedBecauseNoAlias FROM t1`).
     * Don't use subquery in the first `SELECT` statement (don't do this: `SELECT (SELECT t1.field FROM t1) AS field FROM t1`).

@@ -1,11 +1,7 @@
 package fr.ekinci.dbmsreplication;
 
 import java.lang.reflect.Field;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -176,6 +172,10 @@ public class DuplicateTableContent extends AbstractDuplicateTable {
         int indexCounter = 0;
         for(Object[] tuple : tuples){
             for(Object columnValue: tuple){
+                /*
+                LOG.info("Type of columnValue: " +columnValue.getClass().getName());
+                try { Thread.sleep(500); } catch (InterruptedException e) { e.printStackTrace(); }
+                */
                 pstmt.setObject(++indexCounter, columnValue);
             }
         }

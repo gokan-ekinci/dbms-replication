@@ -1,10 +1,7 @@
 package fr.ekinci.dbmsreplication.fieldtype;
 
-import java.math.BigDecimal;
-import java.math.BigInteger;
+import java.sql.Timestamp;
 import java.sql.Types;
-import java.util.Date;
-
 import fr.ekinci.dbmsreplication.SQLMetaDataColumn;
 
 
@@ -80,7 +77,7 @@ public abstract class FieldType {
         }
 
         // INTEGER
-        else if(clazz == int.class || clazz == short.class || clazz == Integer.class || clazz == Short.class){
+        else if(clazz == int.class || clazz == short.class || clazz == byte.class || clazz == Integer.class || clazz == Short.class || clazz == Byte.class){
             return GenericDBFieldType.INTEGER;
         }
 
@@ -95,7 +92,7 @@ public abstract class FieldType {
         }
 
         // DATE
-        else if(clazz == Date.class){
+        else if(clazz == Timestamp.class){
             return GenericDBFieldType.DATE;
         }
 
