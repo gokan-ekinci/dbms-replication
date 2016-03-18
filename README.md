@@ -52,7 +52,7 @@ Things you have to know:
     * `VARCHAR` and `TEXT` fields in SQL mean `String` in Java.
     * `INT` field in SQL means `Integer` in Java, don't use Java's `Long` or `BigInteger`
     * `BIGINTEGER` field in SQL means `Long` in Java, don't use Java's `Integer` or `BigInteger`
-    * `DECIMAL` field in SQL means `java.util.BigDecimal` in Java, don't use `Double`
+    * `DECIMAL` field in SQL means `java.math.BigDecimal` in Java, don't use `Double`
     * `TIMESTAMP` field in SQL means `java.sql.Timestamp` in Java, don't use `java.util.Date`
 * Your SQL query has some constraints :
     * Only aliases will be retrieved (ex: `SELECT t1.foo AS myReturnClassAttributeName, t1.wontBeRetrievedBecauseNoAlias FROM t1`).
