@@ -58,4 +58,3 @@ Things you have to know:
     * Only aliases will be retrieved (ex: `SELECT t1.foo AS myReturnClassAttributeName, t1.wontBeRetrievedBecauseNoAlias FROM t1`).
     * Don't use subquery in the first `SELECT` statement (don't do this: `SELECT (SELECT t1.field FROM t1) AS field FROM t1`).
     * Do not use sql-reserved keywords for fields, or even try to escape it with \` or preceding keyword with `_` may not work (ex: `_Group` or \``Group`\`).
-* This API may need more tests, it has only been tested with less than 10_000 tuples.
