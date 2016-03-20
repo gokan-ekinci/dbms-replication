@@ -4,10 +4,14 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>gokan.ekinci</groupId>
+    <groupId>com.github.gokan-ekinci</groupId>
     <artifactId>dbms-replication</artifactId>
     <version>1.0</version>
     <packaging>jar</packaging>
+    
+    <name>DBMS Replication</name>
+    <description>An API for replicating databases and manipulating Java beans with SQL queries</description>
+    <url>https://github.com/gokan-ekinci/dbms-replication</url>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
