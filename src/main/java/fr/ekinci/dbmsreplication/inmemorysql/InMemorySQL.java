@@ -12,7 +12,7 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.UUID;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.logging.Logger;
 
 /**
@@ -30,6 +30,7 @@ public class InMemorySQL {
 
     private final static Logger LOG = Logger.getLogger(InMemorySQL.class.getName());
     private final static int NUMBER_OF_TUPLES = 1_000;
+    private final static AtomicLong counter = new AtomicLong(0);
 
     private int nbElements;
     private List<Class<?>> classes = new ArrayList<>();
@@ -48,38 +49,25 @@ public class InMemorySQL {
      *
      * @param returnType
      * @param sqlQuery table names must be t1, t2, tn etc
-     * @param parameters
+     * @param placeholders
      * @param <T>
      * @return
      * @throws SQLException
      */
-    public <T> List<T> executeQuery(Class<T> returnType, String sqlQuery, Object... parameters)
-            throws SQLException {
-        return executeQuery("d" + UUID.randomUUID().toString().replace("-", ""), returnType, sqlQuery, parameters);
-    }
-
-    /**
-     *
-     *
-     * @param randDbName
-     * @param returnType
-     * @param sqlQuery table names must be t1, t2, tn etc
-     * @param parameters
-     * @param <T>
-     * @return
-     * @throws SQLException
-     */
-    public <T> List<T> executeQuery(String randDbName, Class<T> returnType, String sqlQuery, Object... parameters)
+    public <T> List<T> executeQuery(Class<T> returnType, String sqlQuery, Object... placeholders)
             throws SQLException {
         try {
+            final String dbName = "d" + counter.incrementAndGet(); // We consider that we never reach Long.MAX_VALUE
+            // NOT using :
+            // String dbName = "d" + Thread.currentThread().getId(); 
+            // String dbName = "d" + UUID.randomUUID().toString().replace("-", "");
+            
             LOG.info("Your SQL query is : " + sqlQuery);
-            LOG.info("+++ executeQuery() for " + randDbName + " has started +++");
+            LOG.info("+++ executeQuery() for " + dbName + " has started +++");
             LOG.info("    WAIT FOR TREATMENT...");
             Instant start = Instant.now();
-            // String dbName = "d" + Thread.currentThread().getId(); => pffff don't use this
 
-
-            try(Connection con = DriverManager.getConnection("jdbc:hsqldb:mem:" + randDbName, "SA", "")){
+            try(Connection con = DriverManager.getConnection("jdbc:hsqldb:mem:" + dbName, "SA", "")){
                 con.setAutoCommit(false);
 
                 // Util objects
@@ -98,7 +86,7 @@ public class InMemorySQL {
                     // Step 2 : Create table
                     String tableName = "t"+(i+1);
                     String createTable = dt.generateSQLTableFromJavaClass(destinationFieldType, tableName, columns);
-                    LOG.info("In database : " + randDbName + " => " + createTable);
+                    LOG.info("In database : " + dbName + " => " + createTable);
                     try(PreparedStatement pstmt = con.prepareStatement(createTable)){
                         pstmt.executeUpdate();
                     }
@@ -110,11 +98,9 @@ public class InMemorySQL {
 
                 // EXECUTE REQUEST
                 List<T> result = new ArrayList<>();
-                // List<SQLMetaDataColumn> resultColumns = dt.generateSQLMetaDataTupleFromSqlQuery(con, sqlQuery); => Need for having less restrictive columns
-
                 try(PreparedStatement pstmt = con.prepareStatement(sqlQuery)){
-                    for(int i = 0, max = parameters.length; i < max; i++){
-                        pstmt.setObject(i, parameters[i]);
+                    for(int i = 0; i < placeholders.length; i++){
+                        pstmt.setObject(i+1, placeholders[i]);
                     }
 
                     try(ResultSet rs = pstmt.executeQuery()){
@@ -124,15 +110,6 @@ public class InMemorySQL {
                             for(String fieldName : fieldNames){
                                 GenericsUtils.setField(entry, rs.getObject(fieldName), fieldName, returnType);
                             }
-
-
-                            /*
-                            for(Field field : GenericsUtils.getAllDeclaredFields(new ArrayList<>(), returnType)) {
-                                field.setAccessible(true);
-                                // Debug (use this commentary with precaution) : LOG.info("Test => field.getName(): " + field.getName() + " rs.getObject(field.getName()): " +  rs.getObject(field.getName()));
-                                field.set(entry, rs.getObject(field.getName()));
-                            }
-                            */
 
                             result.add(entry);
                         }
@@ -147,7 +124,7 @@ public class InMemorySQL {
                 }
 
 
-                LOG.info("--- executeQuery() for " + randDbName + " has finished in : " + Duration.between(start, Instant.now()).getSeconds() + " seconds ---");
+                LOG.info("--- executeQuery() for " + dbName + " has finished in : " + Duration.between(start, Instant.now()).getSeconds() + " seconds ---");
                 return result;
             }
         } catch(SQLException | NoSuchFieldException | IllegalAccessException | InstantiationException e){

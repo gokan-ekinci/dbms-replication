@@ -22,7 +22,7 @@ public abstract class AbstractDuplicateTable {
 
 
     /**
-     *
+     * Extract aliases as field names fom SQL query
      * @param sqlQuery
      * @return
      */
@@ -32,13 +32,13 @@ public abstract class AbstractDuplicateTable {
         }
 
         // SELECT ... FROM
-        Pattern selectToFromPattern = Pattern.compile(" *SELECT *.+ FROM", Pattern.CASE_INSENSITIVE);
+        Pattern selectToFromPattern = Pattern.compile("^ *SELECT *.+ FROM", Pattern.CASE_INSENSITIVE);
         Matcher selectToFromMatcher = selectToFromPattern.matcher(sqlQuery.replaceAll("\n", " "));
         String selectToFromString = null;
         if(selectToFromMatcher.find()){
             selectToFromString = selectToFromMatcher.group();
         } else {
-            throw new SQLException("SQL query is not respected");
+            throw new SQLException("SQL query is not respected: " + sqlQuery);
         }
 
         // AS field

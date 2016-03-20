@@ -9,7 +9,7 @@ import java.sql.Timestamp;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.*;
-// import java.util.*;
+
 
 /**
  * Created by gekinci on 08/03/16.
@@ -45,7 +45,6 @@ public class InMemoryTest {
 
     @Test
     public void testJavaTypes() throws SQLException {
-        // TODO
         String request = "SELECT id_d3 as id_d3, attr5 as attr5, attr6 AS attr6, attr7 AS attr7, attr8 AS attr8, attr9 AS attr9, attr10 AS attr10, attr11 AS attr11, attr12 AS attr12, attr13 AS attr13, attr14 AS attr14, attr18 AS attr18, attr19 AS attr19, attr20 AS attr20 FROM t1";
         List<Dumb3> list = new ArrayList<Dumb3>(){{
             // int id_d2, int id_d3, double attr5, Double attr6, float attr7, Float attr8, byte attr9, short attr10, int attr11, Byte attr12, Short attr13, Integer attr14, char attr15, Character attr16, String attr17, long attr18, Long attr19, Date attr20
@@ -88,10 +87,11 @@ public class InMemoryTest {
                 " ON t2.id_d2 = t3.id_d3" +
                 " ORDER BY t1.id_d1, t2.id_d2, t3.id_d3";
 
-        List<ReturnDumb> result = new InMemorySQL().add(Dumb1.class, ldb1)
-                .add(Dumb2.class, ldb2)
-                .add(Dumb3.class, ldb3)
-                .executeQuery(ReturnDumb.class, sqlRequest);
+        List<ReturnDumb> result = new InMemorySQL()
+            .add(Dumb1.class, ldb1)
+            .add(Dumb2.class, ldb2)
+            .add(Dumb3.class, ldb3)
+            .executeQuery(ReturnDumb.class, sqlRequest);
 
         // Size :
         Assert.assertEquals(result.size(), 5);
@@ -141,6 +141,29 @@ public class InMemoryTest {
         Assert.assertNull(result.get(4).getId_d3());
         Assert.assertNull(result.get(4).getAttr5());
 
+        for(ReturnDumb r : result){
+            System.out.println(r);
+        }
+    }
+    
+    
+    @Test
+    public void testPlaceholders() throws SQLException{
+        List<Dumb1> ldb1 = new ArrayList<>();
+        // int id_d1, double attr2, long attr3
+        ldb1.add(new Dumb1(1, 91, 92));
+        ldb1.add(new Dumb1(2, 93, 94));
+        ldb1.add(new Dumb1(3, 95, 96));
+        
+        String sqlQuery = "SELECT id_d1 AS id_d1 FROM t1 WHERE attr2 <> ? AND attr3 <> ?";
+        
+        List<ReturnDumb> result = new InMemorySQL()
+            .add(Dumb1.class, ldb1)
+            .executeQuery(ReturnDumb.class, sqlQuery, 93, 96);
+        
+        Assert.assertEquals(result.size(), 1);
+        Assert.assertEquals((int) result.get(0).getId_d1(), 1);
+        
         for(ReturnDumb r : result){
             System.out.println(r);
         }
