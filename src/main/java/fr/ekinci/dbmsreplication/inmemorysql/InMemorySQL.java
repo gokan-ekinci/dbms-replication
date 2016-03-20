@@ -16,13 +16,8 @@ import java.util.concurrent.atomic.AtomicLong;
 import java.util.logging.Logger;
 
 /**
- *
- *
- Constraints for ReturnType :
- * Use wrapper type for ReturnType because primitive types do not handle null in Java
- * DECIMAL field in SQL means BigDecimal in Java, don't use double/Double
- * INT field in SQL means Integer in Java, don't use Long
- * Do not use sql-reserved keywords for fields, and escaping with "`" or preceding keyword with "_" may not work
+ * Class for manipulating java collections with SQL queries.
+ * Read the README.md file for more information.
  *
  * @author Gokan EKINCI
  */
@@ -37,10 +32,17 @@ public class InMemorySQL {
     private List<Collection<?>> lists = new ArrayList<>();
 
 
-    public <T> InMemorySQL add(Class<T> clazz, Collection<T> list){
+    public <T> InMemorySQL add(Class<T> clazz, Collection<T> collection){
+        if(clazz == null){
+            throw new IllegalArgumentException("clazz parameter must not be NULL");
+        } 
+        if(collection == null){
+            throw new IllegalArgumentException("collection parameter must not be NULL");
+        }
+        
         this.nbElements++;
         this.classes.add(clazz);
-        this.lists.add(list);
+        this.lists.add(collection);
         return this;
     }
 
